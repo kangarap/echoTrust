@@ -6,7 +6,6 @@ import org.hyperledger.fabric.gateway.ContractException;
 import org.hyperledger.fabric.gateway.Gateway;
 import org.hyperledger.fabric.gateway.Network;
 
-import javax.annotation.Resource;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -20,8 +19,7 @@ public class EchoTrustService {
     /**
      * 这个builder需要关闭，每次都用try with resource自动关
      */
-    @Resource
-    Gateway.Builder builder;
+    private final Gateway.Builder builder;
 
 
     /**

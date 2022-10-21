@@ -1,5 +1,6 @@
 package com.kgr.echoTrust.config;
 
+import com.kgr.echoTrust.core.EchoTrustService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperledger.fabric.gateway.Gateway;
@@ -38,6 +39,8 @@ public class AutoConfiguration {
     @Value("${organizations.bigdataorg.mspid}")
     private String mspId;
 
+
+
     @Bean
     public Gateway.Builder builder() throws IOException {
         Path walletPath = Paths.get("wallet");
@@ -57,5 +60,10 @@ public class AutoConfiguration {
 
             return builder;
         }
+    }
+
+    @Bean
+    public EchoTrustService echoTrustService(Gateway.Builder builder) {
+        return new EchoTrustService(builder);
     }
 }
