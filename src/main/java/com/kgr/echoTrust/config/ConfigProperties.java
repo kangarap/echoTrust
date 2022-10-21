@@ -2,8 +2,7 @@ package com.kgr.echoTrust.config;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author kgr
@@ -11,8 +10,7 @@ import org.springframework.stereotype.Component;
  */
 
 @Data
-@Component
-@EnableConfigurationProperties
+@Configuration
 public class ConfigProperties {
 
     @Value("${resource-name}")
