@@ -1,14 +1,14 @@
 package com.kgr.echoTrust.config;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperledger.fabric.gateway.Gateway;
 import org.hyperledger.fabric.gateway.Wallet;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
-import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -20,13 +20,23 @@ import java.nio.file.Paths;
  * @create 2022-10-21 10:44
  */
 @Configuration
-@EnableConfigurationProperties(ConfigProperties.class)
 @Slf4j
+@Data
 public class AutoConfiguration {
 
-    @Resource
-    private ConfigProperties configProperties;
 
+    @Value("${resource-name}")
+    private String resourceName;
+
+
+    @Value("${organizations.bigdataorg.admin.sign-certs}")
+    private String adminSignCerts;
+
+    @Value("${organizations.bigdataorg.admin.key-store}")
+    private String adminKeyStore;
+
+    @Value("${organizations.bigdataorg.mspid}")
+    private String mspId;
 
     @Bean
     public Gateway.Builder builder() throws IOException {
@@ -34,12 +44,12 @@ public class AutoConfiguration {
         Wallet wallet = Wallet.createFileSystemWallet(walletPath);
 
         try (
-                InputStream adminSignCertInputStream  = this.getClass().getResourceAsStream(configProperties.getAdminSignCerts());
-                InputStream adminKeyStoreInputStream = this.getClass().getResourceAsStream(configProperties.getAdminKeyStore())
+                InputStream adminSignCertInputStream  = this.getClass().getResourceAsStream(adminSignCerts);
+                InputStream adminKeyStoreInputStream = this.getClass().getResourceAsStream(adminKeyStore)
         ){
-            Wallet.Identity user = Wallet.Identity.createIdentity(configProperties.getMspId(), new InputStreamReader(adminSignCertInputStream),new InputStreamReader(adminKeyStoreInputStream));
+            Wallet.Identity user = Wallet.Identity.createIdentity(mspId, new InputStreamReader(adminSignCertInputStream),new InputStreamReader(adminKeyStoreInputStream));
             wallet.put("admin", user);
-            ClassPathResource classPathResource = new ClassPathResource(configProperties.getResourceName());
+            ClassPathResource classPathResource = new ClassPathResource(resourceName);
 
             Gateway.Builder builder = Gateway.createBuilder();
 
