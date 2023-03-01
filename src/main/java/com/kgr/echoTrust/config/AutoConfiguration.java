@@ -39,11 +39,13 @@ public class AutoConfiguration {
     @Value("${organizations.bigdataorg.mspid}")
     private String mspId;
 
+    @Value("${organizations.bigdataorg.walletPath:wallet}")
+    private String wallets;
 
 
     @Bean
     public Gateway.Builder builder() throws IOException {
-        Path walletPath = Paths.get("wallet");
+        Path walletPath = Paths.get(wallets);
         Wallet wallet = Wallet.createFileSystemWallet(walletPath);
 
         try (
